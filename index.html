@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pro Email Builder for Gmail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .input-group {
+      transition: all 0.2s;
+    }
+    
+    .input-group:focus-within {
+      transform: translateX(4px);
+    }
+    
+    .color-picker-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 2px solid #e5e7eb;
+      transition: all 0.2s;
+    }
+    
+    .color-picker-wrapper:hover {
+      border-color: #6366f1;
+      transform: scale(1.02);
+    }
+    
+    input[type="color"] {
+      -webkit-appearance: none;
+      border: none;
+      width: 150%;
+      height: 150%;
+      position: absolute;
+      top: -25%;
+      left: -25%;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+    }
+    
+    .preview-container {
+      background-image: 
+        linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
+        linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
+        linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+    
+    .device-toggle {
+      transition: all 0.3s;
+    }
+    
+    .device-toggle.active {
+      background-color: #4f46e5;
+      color: white;
+    }
+    
+    .toast {
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .template-card {
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    
+    .template-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .template-card.active {
+      border-color: #4f46e5;
+      background-color: #eef2ff;
+    }
+    
+    /* Custom scrollbar */
+    textarea::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    textarea::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    textarea::-webkit-scrollbar-thumb {
+      background: #c7c7c7;
+      border-radius: 4px;
+    }
+    
+    textarea::-webkit-scrollbar-thumb:hover {
+      background: #a0a0a0;
+    }
+    
+    .slider-thumb::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #4f46e5;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .slider-thumb::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+    }
+  </style>
+</head>
+<body class="p-4 md:p-8">
+
+  <!-- Header -->
+  <div class="max-w-7xl mx-auto mb-6 text-center text-white">
+    <h1 class="text-3xl md:text-4xl font-bold mb-2 tracking-tight">
+      <i class="fas fa-envelope-open-text mr-3"></i>Pro Email Builder
+    </h1>
+    <p class="text-white/80 text-lg">Design professional emails that paste perfectly into Gmail</p>
+  </div>
+
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- CONTROLS SIDEBAR -->
+    <div class="lg:col-span-4 space-y-4">
+      
+      <!-- Templates -->
+      <div class="glass-panel rounded-2xl p-6 shadow-2xl">
+        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Quick Templates</h3>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="template-card active p-3 rounded-lg border-2 border-gray-200 text-center" onclick="loadTemplate('job')">
+            <i class="fas fa-briefcase text-indigo-600 mb-1"></i>
+            <div class="text-xs font-semibold">Job Application</div>
+          </div>
+          <div class="template-card p-3 rounded-lg border-2 border-gray-200 text-center" onclick="loadTemplate('followup')">
+            <i class="fas fa-handshake text-indigo-600 mb-1"></i>
+            <div class="text-xs font-semibold">Follow Up</div>
+          </div>
+          <div class="template-card p-3 rounded-lg border-2 border-gray-200 text-center" onclick="loadTemplate('intro')">
+            <i class="fas fa-user-plus text-indigo-600 mb-1"></i>
+            <div class="text-xs font-semibold">Introduction</div>
+          </div>
+          <div class="template-card p-3 rounded-lg border-2 border-gray-200 text-center" onclick="loadTemplate('minimal')">
+            <i class="fas fa-align-left text-indigo-600 mb-1"></i>
+            <div class="text-xs font-semibold">Minimal</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Styling Controls -->
+      <div class="glass-panel rounded-2xl p-6 shadow-2xl space-y-4">
+        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Design Settings</h3>
+        
+        <!-- Colors -->
+        <div class="grid grid-cols-2 gap-3">
+          <div class="input-group">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Background</label>
+            <div class="color-picker-wrapper h-10 w-full">
+              <input type="color" id="bg" value="#ffffff" oninput="updatePreview()">
+            </div>
+          </div>
+          <div class="input-group">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Text Color</label>
+            <div class="color-picker-wrapper h-10 w-full">
+              <input type="color" id="color" value="#1f2937" oninput="updatePreview()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Typography -->
+        <div class="input-group">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">Font Family</label>
+          <div class="relative">
+            <select id="font" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none" onchange="updatePreview()">
+              <option value="Arial, Helvetica, sans-serif">Arial / Helvetica</option>
+              <option value="Georgia, 'Times New Roman', serif">Georgia / Times</option>
+              <option value="Verdana, Geneva, sans-serif">Verdana / Geneva</option>
+              <option value="'Segoe UI', Tahoma, sans-serif">Segoe UI / Tahoma</option>
+              <option value="'Courier New', monospace">Courier New</option>
+            </select>
+            <i class="fas fa-chevron-down absolute right-3 top-3 text-xs text-gray-400 pointer-events-none"></i>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="input-group">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Size</label>
+            <select id="fontSize" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="updatePreview()">
+              <option value="13px">13px</option>
+              <option value="14px" selected>14px</option>
+              <option value="16px">16px</option>
+              <option value="18px">18px</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Padding</label>
+            <select id="padding" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="updatePreview()">
+              <option value="20px">Small</option>
+              <option value="40px" selected>Medium</option>
+              <option value="60px">Large</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Sliders -->
+        <div class="space-y-3">
+          <div>
+            <div class="flex justify-between mb-1">
+              <label class="text-xs font-semibold text-gray-600">Line Height</label>
+              <span id="lineHeightValue" class="text-xs text-gray-500">1.6</span>
+            </div>
+            <input type="range" id="lineHeight" min="1" max="2" step="0.1" value="1.6" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb" oninput="updatePreview()">
+          </div>
+          
+          <div>
+            <div class="flex justify-between mb-1">
+              <label class="text-xs font-semibold text-gray-600">Border Radius</label>
+              <span id="radiusValue" class="text-xs text-gray-500">8px</span>
+            </div>
+            <input type="range" id="radius" min="0" max="24" value="8" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb" oninput="updatePreview()">
+          </div>
+
+          <div>
+            <div class="flex justify-between mb-1">
+              <label class="text-xs font-semibold text-gray-600">Max Width</label>
+              <span id="widthValue" class="text-xs text-gray-500">600px</span>
+            </div>
+            <input type="range" id="maxWidth" min="400" max="800" step="10" value="600" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb" oninput="updatePreview()">
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Editor -->
+      <div class="glass-panel rounded-2xl p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider">Email Content</h3>
+          <button onclick="clearContent()" class="text-xs text-red-500 hover:text-red-700 font-medium">
+            <i class="fas fa-trash-alt mr-1"></i>Clear
+          </button>
+        </div>
+        <textarea id="content" class="w-full h-64 p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none" placeholder="Enter your email content here..." oninput="updatePreview()"></textarea>
+        <div class="mt-2 text-xs text-gray-500 flex justify-between">
+          <span>Use blank lines for paragraphs</span>
+          <span id="charCount">0 chars</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2">
+        <button onclick="copyForGmail()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transform transition hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+          <i class="fas fa-copy"></i>
+          Copy for Gmail
+        </button>
+        <button onclick="copyHTML()" class="w-full bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-xl shadow-md border border-gray-200 transform transition hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+          <i class="fas fa-code"></i>
+          Copy HTML Code
+        </button>
+      </div>
+    </div>
+
+    <!-- PREVIEW AREA -->
+    <div class="lg:col-span-8">
+      <div class="glass-panel rounded-2xl p-6 shadow-2xl h-full flex flex-col">
+        
+        <!-- Toolbar -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+          <h2 class="text-xl font-bold text-gray-800">Live Preview</h2>
+          
+          <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
+            <button onclick="setDevice('desktop')" id="btn-desktop" class="device-toggle active px-4 py-1.5 rounded-md text-sm font-medium flex items-center gap-2">
+              <i class="fas fa-desktop"></i> Desktop
+            </button>
+            <button onclick="setDevice('mobile')" id="btn-mobile" class="device-toggle px-4 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 text-gray-600">
+              <i class="fas fa-mobile-alt"></i> Mobile
+            </button>
+          </div>
+        </div>
+
+        <!-- Preview Container -->
+        <div class="preview-container flex-1 rounded-xl border-2 border-dashed border-gray-300 p-4 overflow-auto flex items-center justify-center min-h-[500px]">
+          <div id="previewWrapper" class="transition-all duration-300 w-full">
+            <div id="emailPreview" class="shadow-2xl transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+          <div class="flex items-start gap-3">
+            <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+            <div class="text-sm text-blue-800">
+              <strong>Pro Tip:</strong> Click "Copy for Gmail" then paste directly into Gmail's compose window (Ctrl+V). The formatting will be preserved perfectly. For best results, use Gmail's "Plain text mode" off.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast fixed bottom-6 right-6 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-2xl flex items-center gap-3 z-50">
+    <i class="fas fa-check-circle text-green-400"></i>
+    <span id="toastMessage">Copied successfully!</span>
+  </div>
+
+  <script>
+    // Templates
+    const templates = {
+      job: `Dear Hiring Manager,
+
+I hope this email finds you well.
+
+I am writing to express my strong interest in the [Position] role at [Company]. With [X] years of experience in [Field], I have developed a strong foundation in [Key Skills].
+
+Highlights of my qualifications include:
+• [Achievement/Skill 1]
+• [Achievement/Skill 2]  
+• [Achievement/Skill 3]
+
+I am particularly drawn to [Company] because of [Specific Reason]. I would welcome the opportunity to discuss how my background and skills would be a perfect fit for your team.
+
+Thank you for your time and consideration.
+
+Best regards,
+[Your Name]
+[Your Title]
+[Contact Information]`,
+
+      followup: `Hi [Name],
+
+I hope you're doing well.
+
+I wanted to follow up on our conversation from [Date/Last Week] regarding [Topic]. I really enjoyed our discussion about [Specific Detail].
+
+As promised, I have [Action Taken/Attached Document]. I believe this [will help/could be useful for] [Specific Outcome].
+
+Please let me know if you have any questions or if there's a good time to connect this week.
+
+Looking forward to hearing from you.
+
+Best,
+[Your Name]`,
+
+      intro: `Hi [Name],
+
+I hope this email finds you well.
+
+My name is [Your Name], and I'm a [Your Role] at [Company/Organization]. I've been following your work in [Field/Industry] and I'm truly impressed by [Specific Achievement or Project].
+
+I'm reaching out because [Reason for Introduction - e.g., "I'd love to connect with professionals in the industry" or "I believe there might be synergies between our work"].
+
+Would you be open to a brief call or coffee chat? I'd love to learn more about your experience with [Specific Topic].
+
+Thank you for your time.
+
+Best regards,
+[Your Name]
+[Contact Information]`,
+
+      minimal: `Hi there,
+
+I hope this message finds you well.
+
+[Your message here...]
+
+Best regards,
+[Your Name]`
+    };
+
+    // State
+    let currentDevice = 'desktop';
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      loadTemplate('job');
+    });
+
+    function loadTemplate(type) {
+      // Update UI
+      document.querySelectorAll('.template-card').forEach(card => {
+        card.classList.remove('active');
+      });
+      event.target.closest('.template-card').classList.add('active');
+      
+      // Load content
+      document.getElementById('content').value = templates[type];
+      updatePreview();
+      showToast(`Loaded ${type} template`);
+    }
+
+    function clearContent() {
+      if(confirm('Are you sure you want to clear all content?')) {
+        document.getElementById('content').value = '';
+        updatePreview();
+      }
+    }
+
+    function updatePreview() {
+      const bg = document.getElementById('bg').value;
+      const color = document.getElementById('color').value;
+      const font = document.getElementById('font').value;
+      const fontSize = document.getElementById('fontSize').value;
+      const padding = document.getElementById('padding').value;
+      const radius = document.getElementById('radius').value;
+      const lineHeight = document.getElementById('lineHeight').value;
+      const maxWidth = document.getElementById('maxWidth').value;
+      
+      // Update value displays
+      document.getElementById('radiusValue').textContent = radius + 'px';
+      document.getElementById('lineHeightValue').textContent = lineHeight;
+      document.getElementById('widthValue').textContent = maxWidth + 'px';
+      
+      // Process content - convert newlines to paragraphs
+      const content = document.getElementById('content').value;
+      document.getElementById('charCount').textContent = content.length + ' chars';
+      
+      // Split by double newlines for paragraphs, single for line breaks
+      const paragraphs = content.split('\n\n').map(para => {
+        if (!para.trim()) return '';
+        // Replace single newlines with <br> within paragraphs
+        const lines = para.split('\n').join('<br>');
+        return `<p style="margin: 0 0 16px 0; line-height: ${lineHeight};">${lines}</p>`;
+      }).join('');
+      
+      // Generate email HTML (table-based for email client compatibility)
+      const emailHTML = `
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 0; padding: 0;">
+  <tr>
+    <td align="center" style="padding: 20px 0;">
+      <table width="${maxWidth}" cellpadding="0" cellspacing="0" border="0" style="
+        background-color: ${bg};
+        color: ${color};
+        font-family: ${font};
+        font-size: ${fontSize};
+        line-height: ${lineHeight};
+        border-radius: ${radius}px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        max-width: ${maxWidth}px;
+        width: 100%;
+      ">
+        <tr>
+          <td style="padding: ${padding};">
+            ${paragraphs || '<p style="margin: 0; color: #9ca3af; font-style: italic;">Start typing to see preview...</p>'}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>`;
+      
+      document.getElementById('emailPreview').innerHTML = emailHTML;
+      
+      // Apply device width
+      const wrapper = document.getElementById('previewWrapper');
+      if (currentDevice === 'mobile') {
+        wrapper.style.maxWidth = '375px';
+      } else {
+        wrapper.style.maxWidth = '100%';
+      }
+    }
+
+    function setDevice(device) {
+      currentDevice = device;
+      
+      // Update buttons
+      document.getElementById('btn-desktop').classList.toggle('active', device === 'desktop');
+      document.getElementById('btn-mobile').classList.toggle('active', device === 'mobile');
+      document.getElementById('btn-desktop').classList.toggle('text-gray-600', device !== 'desktop');
+      document.getElementById('btn-mobile').classList.toggle('text-gray-600', device !== 'mobile');
+      
+      updatePreview();
+    }
+
+    async function copyForGmail() {
+      const preview = document.getElementById('emailPreview');
+      
+      try {
+        // Create a range and selection
+        const range = document.createRange();
+        range.selectNodeContents(preview);
+        
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        
+        // Execute copy
+        const successful = document.execCommand('copy');
+        selection.removeAllRanges();
+        
+        if (successful) {
+          showToast('Copied! Paste into Gmail compose window.');
+        } else {
+          throw new Error('execCommand failed');
+        }
+      } catch (err) {
+        // Fallback to Clipboard API
+        try {
+          const htmlContent = preview.innerHTML;
+          const blob = new Blob([htmlContent], { type: 'text/html' });
+          const data = [new ClipboardItem({ 'text/html': blob })];
+          await navigator.clipboard.write(data);
+          showToast('Copied! Paste into Gmail compose window.');
+        } catch (err2) {
+          showToast('Failed to copy. Please try manually selecting and copying.', true);
+        }
+      }
+    }
+
+    async function copyHTML() {
+      const html = document.getElementById('emailPreview').innerHTML;
+      
+      try {
+        await navigator.clipboard.writeText(html);
+        showToast('HTML code copied to clipboard!');
+      } catch (err) {
+        // Fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = html;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showToast('HTML code copied to clipboard!');
+      }
+    }
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      const icon = toast.querySelector('i');
+      
+      toastMessage.textContent = message;
+      
+      if (isError) {
+        icon.className = 'fas fa-exclamation-circle text-red-400';
+      } else {
+        icon.className = 'fas fa-check-circle text-green-400';
+      }
+      
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Auto-update on load
+    window.onload = updatePreview;
+  </script>
+</body>
+</html>
