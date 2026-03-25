@@ -134,6 +134,7 @@
       box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
     }
   </style>
+<base target="_blank">
 </head>
 <body class="p-4 md:p-8">
 
@@ -180,15 +181,15 @@
         <!-- Colors -->
         <div class="grid grid-cols-2 gap-3">
           <div class="input-group">
-            <label class="block text-xs font-semibold text-gray-600 mb-1"></label>
+            <label class="block text-xs font-semibold text-gray-600 mb-1">Background</label>
             <div class="color-picker-wrapper h-10 w-full">
-              <input type="color" id="bg" value="#ffffff" oninput="updatePreview()">
+              <input type="color" id="bg" value="#1f2937" oninput="updatePreview()">
             </div>
           </div>
           <div class="input-group">
             <label class="block text-xs font-semibold text-gray-600 mb-1">Text Color</label>
             <div class="color-picker-wrapper h-10 w-full">
-              <input type="color" id="color" value="#1f2937" oninput="updatePreview()">
+              <input type="color" id="color" value="#ffffff" oninput="updatePreview()">
             </div>
           </div>
         </div>
@@ -249,9 +250,9 @@
           <div>
             <div class="flex justify-between mb-1">
               <label class="text-xs font-semibold text-gray-600">Max Width</label>
-              <span id="widthValue" class="text-xs text-gray-500">800px</span>
+              <span id="widthValue" class="text-xs text-gray-500">750px</span>
             </div>
-            <input type="range" id="maxWidth" min="400" max="800" step="10" value="800" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb" oninput="updatePreview()">
+            <input type="range" id="maxWidth" min="400" max="800" step="10" value="750" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb" oninput="updatePreview()">
           </div>
         </div>
       </div>
