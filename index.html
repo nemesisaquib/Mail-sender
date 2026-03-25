@@ -55,13 +55,13 @@
     }
     
     .preview-container {
-      background-image: 
+      -image: 
         linear-gradient(45deg, #f0f0f0 25%, transparent 25%), 
         linear-gradient(-45deg, #f0f0f0 25%, transparent 25%), 
         linear-gradient(45deg, transparent 75%, #f0f0f0 75%), 
         linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
-      background-size: 20px 20px;
-      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      -size: 20px 20px;
+      -position: 0 0, 0 10px, 10px -10px, -10px 0px;
     }
     
     .device-toggle {
@@ -69,7 +69,7 @@
     }
     
     .device-toggle.active {
-      background-color: #4f46e5;
+      -color: #4f46e5;
       color: white;
     }
     
@@ -96,7 +96,7 @@
     
     .template-card.active {
       border-color: #4f46e5;
-      background-color: #eef2ff;
+      -color: #eef2ff;
     }
     
     /* Custom scrollbar */
@@ -105,17 +105,17 @@
     }
     
     textarea::-webkit-scrollbar-track {
-      background: #f1f1f1;
+      : #f1f1f1;
       border-radius: 4px;
     }
     
     textarea::-webkit-scrollbar-thumb {
-      background: #c7c7c7;
+      : #c7c7c7;
       border-radius: 4px;
     }
     
     textarea::-webkit-scrollbar-thumb:hover {
-      background: #a0a0a0;
+      : #a0a0a0;
     }
     
     .slider-thumb::-webkit-slider-thumb {
@@ -124,7 +124,7 @@
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      background: #4f46e5;
+      : #4f46e5;
       cursor: pointer;
       transition: all 0.2s;
     }
@@ -180,7 +180,7 @@
         <!-- Colors -->
         <div class="grid grid-cols-2 gap-3">
           <div class="input-group">
-            <label class="block text-xs font-semibold text-gray-600 mb-1">Background</label>
+            <label class="block text-xs font-semibold text-gray-600 mb-1"></label>
             <div class="color-picker-wrapper h-10 w-full">
               <input type="color" id="bg" value="#ffffff" oninput="updatePreview()">
             </div>
@@ -213,8 +213,8 @@
             <label class="block text-xs font-semibold text-gray-600 mb-1">Size</label>
             <select id="fontSize" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" onchange="updatePreview()">
               <option value="13px">13px</option>
-              <option value="14px" selected>14px</option>
-              <option value="16px">16px</option>
+              <option value="14px" >14px</option>
+              <option value="16px" selected>16px</option>
               <option value="18px">18px</option>
             </select>
           </div>
@@ -249,9 +249,9 @@
           <div>
             <div class="flex justify-between mb-1">
               <label class="text-xs font-semibold text-gray-600">Max Width</label>
-              <span id="widthValue" class="text-xs text-gray-500">600px</span>
+              <span id="widthValue" class="text-xs text-gray-500">800px</span>
             </div>
-            <input type="range" id="maxWidth" min="400" max="800" step="10" value="600" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb" oninput="updatePreview()">
+            <input type="range" id="maxWidth" min="400" max="800" step="10" value="800" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb" oninput="updatePreview()">
           </div>
         </div>
       </div>
@@ -343,7 +343,7 @@ Highlights of my qualifications include:
 • [Achievement/Skill 2]  
 • [Achievement/Skill 3]
 
-I am particularly drawn to [Company] because of [Specific Reason]. I would welcome the opportunity to discuss how my background and skills would be a perfect fit for your team.
+I am particularly drawn to [Company] because of [Specific Reason]. I would welcome the opportunity to discuss how my  and skills would be a perfect fit for your team.
 
 Thank you for your time and consideration.
 
